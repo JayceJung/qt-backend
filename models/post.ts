@@ -7,6 +7,10 @@ const postSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
+        title: {
+            required: true,
+            type: String
+        },
         content: {
             required: true,
             type: String
@@ -23,4 +27,4 @@ const postSchema = new mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model('Post', postSchema)
+export default mongoose.model('Post', postSchema)

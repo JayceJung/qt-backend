@@ -1,14 +1,15 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import User from './model/user';
+import { setupRoutes } from './routes';
+import User from './models/user';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const mongoString = process.env.DATABASE_URL;
 
 if (mongoString){
@@ -28,22 +29,4 @@ database.once('connected', () => {
     
 })
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, World!');
-});
-
-app.post('/add-user', async (req: Request, res: Response) => {
-    const userRequest = {
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email
-    }
-    try {
-        const user = await User.create(userRequest);
-        return res.status(200).json(user);
-    }
-    catch (err) {
-        return res.status(500).json(err);
-    }
-    
-})
+setupRoutes(app);
