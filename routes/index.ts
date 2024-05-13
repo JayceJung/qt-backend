@@ -1,5 +1,7 @@
 import express from 'express';
 import session from 'express-session';
+import cors from 'cors';
+
 import { authRoutes } from './authRoutes';
 import { userRoutes } from './userRoutes';
 import { postRoutes } from './postRoutes';
@@ -13,7 +15,7 @@ export function setupRoutes(app: express.Express) {
     };
 
     const secretKey = generateSecretKey();
-
+    app.use(cors());
     app.use(session({
         secret: secretKey,
         resave: false,
@@ -25,6 +27,6 @@ export function setupRoutes(app: express.Express) {
 
     app.use('/', authRoutes);
     app.use('/users', userRoutes);
-    app.use('/post', postRoutes);
+    app.use('/posts', postRoutes);
     // Add more routes as needed
 }

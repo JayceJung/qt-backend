@@ -24,13 +24,23 @@ export async function loginUser(req: Request, res: Response) {
 
         // If username and password are correct, return success message
         // @ts-ignore
-        req.session.userId = user.id;
+        req.session.user = user;
         return res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         // Handle other errors
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' });
     }
+}
+
+export async function logoutUser(req: Request, res: Response) {
+    req.session.destroy((err: Error) => {
+        if (err) {
+            return res.status(500).json({ message: 'Internal server error' });
+        } else {
+            return res.status(200).json({ message: 'Login successful' });
+        }
+    })
 }
 
 export async function registerUser(req: Request, res: Response) {
