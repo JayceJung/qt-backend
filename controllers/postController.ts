@@ -34,6 +34,46 @@ export async function getAllPost(req: Request, res: Response) {
     }
 }
 
+export async function getPost(req: Request, res: Response) {
+    const { id } = req.params;
+    console.log(req.params);
+    try {
+        const post = await Post.findById(id).exec();
+        const comments = [];
+        if (!post) {
+            return res.status(500).json({ message: 'Internal server error' })
+        }
+        
+        console.log(post.comments);
+        
+        const allComment = await Comment.find({ "_id": {"$in": post.comments }}).exec()
+        
+        for (const comment of allComment) {
+            const user = await User.findById(comment.user).exec()
+            if (!user) {
+                return res.status(401).json({ message: 'User not found' })
+            }
+            comments.push({
+                user: user?.username,
+                comment: comment.comment
+            })
+        }
+
+        const response = {
+            post: {
+                title: post.title,
+                content: post.content
+            },
+            comments: comments
+        }
+        return res.status(200).json({ payload: response });
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Internal server error' })
+    }
+}
+
 export async function updatePost(req: Request, res: Response) {
 
 }
