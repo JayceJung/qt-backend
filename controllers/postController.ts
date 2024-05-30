@@ -64,7 +64,8 @@ export async function getPost(req: Request, res: Response) {
                 title: post.title,
                 content: post.content
             },
-            comments: comments
+            comments: comments,
+            bibleVerse: post.bibleVerse
         }
         return res.status(200).json({ payload: response });
     }
